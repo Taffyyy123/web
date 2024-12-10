@@ -31,25 +31,24 @@ const Page = () => {
       setPasswordError(false);
     }
   };
-  const getData = async () => {
-    const dataJSON = await fetch(
-      "https://instagram-backend-1-v8sf.onrender.com/user/getUser",
-      { method: "GET" }
-    );
-    const res = await dataJSON.json();
-    setData(res);
-    console.log(res);
-  };
-  useEffect(() => {
-    getData();
-  }, []);
+  // const getData = async () => {
+  //   const dataJSON = await fetch(
+  //     "https://instagram-backend-1-v8sf.onrender.com/user/getUser"
+  //   );
+  //   const res = await dataJSON.json();
+  //   setData(res);
+  //   console.log(res);
+  // };
+  // useEffect(() => {
+  //   getData();
+  // }, []);
 
   return (
     <div className="w-screen h-screen flex flex-col justify-center items-center bg-black space-y-20">
       <div className=" italic text-white font-serif text-5xl">Instagram</div>
       <div className="w-screen flex flex-col justify-center items-center space-y-2">
         <Input
-          className="w-3/4 bg-zinc-900 text-gray-50 "
+          className="w-3/4 bg-zinc-900 text-gray-50 outline-none"
           placeholder="Username"
           type="Email"
           value={usernameValue}
@@ -60,14 +59,14 @@ const Page = () => {
         )}
         <div className="flex w-3/4 bg-zinc-900 border border-input border-black">
           <Input
-            className="w-3/4 bg-zinc-900 text-gray-50"
+            className="w-3/4 bg-zinc-900 text-gray-50 outline-none"
             placeholder="Password"
             type={showPassword ? "text" : "password"}
             value={passwordValue}
             onChange={getPasswordValue}
           />{" "}
           <Button
-            className=" dark:text-white bg-zinc-900  text-gray-50 justify-center "
+            className=" dark:text-white text-gray-50 justify-center "
             type="button"
             onClick={() => {
               setShowPassword((prev) => !prev);

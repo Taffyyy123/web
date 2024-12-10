@@ -114,14 +114,16 @@ const Page = () => {
               <div className="text-white text-sm font-sans font-bold">
                 123 likes
               </div>
-              <div className="flex justify-start">
-                <Link
-                  className="text-white text-sm font-sans font-bold"
-                  href={`/posts/${post._id}`}
-                >
-                  View all {post.comments.length} comments
-                </Link>
-              </div>
+              {post.comments.length > 0 && (
+                <div className="flex justify-start">
+                  <Link
+                    className="text-white text-sm font-sans font-bold"
+                    href={`/posts/${post._id}`}
+                  >
+                    View all {post.comments.length} comments
+                  </Link>
+                </div>
+              )}
             </CardFooter>
           </Card>
         );

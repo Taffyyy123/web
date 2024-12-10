@@ -38,7 +38,7 @@ const Page = ({ params }: { params: Promise<{ postId: string }> }) => {
 
   useEffect(() => {
     getComments();
-  }, []);
+  }, [postId]);
 
   return (
     <div className="bg-black h-screen">
