@@ -117,7 +117,7 @@ const Page = () => {
               <div className="flex justify-start">
                 <Link
                   className="text-white text-sm font-sans font-bold"
-                  href={`comments&${post._id}`}
+                  href={`/posts/${post._id}`}
                 >
                   View all {post.comments.length} comments
                 </Link>
