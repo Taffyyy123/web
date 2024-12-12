@@ -55,9 +55,15 @@ export type postType = {
 const Page = () => {
   const [posts, setPosts] = useState<postType>([]);
   const getPosts = async () => {
-    console.log("working");
+    const token = localStorage.getItem("accessToken");
     const jsonData = await fetch(
-      "https://instagram-backend-e3eq.onrender.com/post/getPosts"
+      "https://instagram-backend-e3eq.onrender.com/post/getPosts",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
     );
     const response = await jsonData.json();
     setPosts(response);
