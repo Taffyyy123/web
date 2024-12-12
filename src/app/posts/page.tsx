@@ -9,10 +9,11 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { useState, useEffect } from "react";
-import { Heart } from "lucide-react";
+import { Heart, Home } from "lucide-react";
 import { MessageCircle } from "lucide-react";
 import { Send } from "lucide-react";
 import { Bookmark } from "lucide-react";
+import { Search } from "lucide-react";
 import {
   Carousel,
   CarouselContent,
@@ -21,6 +22,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 type likeTypes = {
   profileImage: string;
@@ -67,7 +69,7 @@ const Page = () => {
   }, []);
 
   return (
-    <div className=" bg-black ">
+    <div className=" bg-black relative">
       {posts?.map((post) => {
         return (
           <Card
@@ -125,6 +127,18 @@ const Page = () => {
                 </div>
               )}
             </CardFooter>
+            <div className="w-screen fixed bottom-0 bg-black">
+              <Link className="w-2/4 bg-black" href={"/posts"}>
+                <Button className="w-2/4 bg-black">
+                  <Home />
+                </Button>
+              </Link>
+              <Link className="w-2/4 bg-black" href={"/search"}>
+                <Button className="w-2/4 bg-black">
+                  <Search />
+                </Button>
+              </Link>
+            </div>
           </Card>
         );
       })}
