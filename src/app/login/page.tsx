@@ -84,7 +84,7 @@ const Page = () => {
         {passwordError == true && (
           <div className="text-red-600">Hooson bj bolku</div>
         )}
-        <Button className="w-3/4 bg-blue-700" onClick={checkUserAndPass}>
+        <Button className="w-3/4 bg-blue-700" onClick={handleSubmit}>
           Log in
         </Button>
       </div>
