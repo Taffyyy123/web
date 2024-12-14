@@ -3,8 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Page = () => {
+  const [user, setUser] = useState(null);
   const [usernameValue, setUsernameValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
   const [usernameError, setUsernameError] = useState(false);
@@ -19,7 +21,7 @@ const Page = () => {
     setPasswordValue(e.target.value);
   };
 
-  const checkUserAndPass = () => {
+  const handleSubmit = () => {
     if (usernameValue.length == 0) {
       setUsernameError(true);
     } else {
@@ -30,18 +32,22 @@ const Page = () => {
     } else {
       setPasswordError(false);
     }
+    fetch("https://instagram-backend-e3eq.onrender.com/user/loginUser", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        password: passwordValue,
+        username: usernameValue,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setPasswordValue("");
+        setUsernameValue("");
+        const access = data.token;
+        localStorage.setItem("accessToken", access);
+      });
   };
-  // const getData = async () => {
-  //   const dataJSON = await fetch(
-  //     "https://instagram-backend-1-v8sf.onrender.com/user/getUser"
-  //   );
-  //   const res = await dataJSON.json();
-  //   setData(res);
-  //   console.log(res);
-  // };
-  // useEffect(() => {
-  //   getData();
-  // }, []);
 
   return (
     <div className="w-screen h-screen flex flex-col justify-center items-center bg-black space-y-20">

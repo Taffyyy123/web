@@ -21,7 +21,9 @@ const Page = () => {
   const getPasswordValue = (e: { target: { value: string } }) => {
     setPasswordValue(e.target.value);
   };
-  const checkSignup = () => {
+
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     if (emailValue.length === 0) {
       setEmailError(true);
     } else {
@@ -37,6 +39,23 @@ const Page = () => {
     } else {
       setPasswordError(false);
     }
+    fetch("https://instagram-backend-e3eq.onrender.com/user/createUser", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: emailValue,
+        password: passwordValue,
+        username: usernameValue,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setEmailValue("");
+        setPasswordValue("");
+        setUsernameValue("");
+        const access = data.token;
+        localStorage.setItem("accessToken", access);
+      });
   };
 
   return (
@@ -77,7 +96,7 @@ const Page = () => {
         )}
         <Button
           className="w-3/4 bg-blue-500 font-mono text-base"
-          onClick={checkSignup}
+          onClick={handleSubmit}
         >
           Sign up
         </Button>

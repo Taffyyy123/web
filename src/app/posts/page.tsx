@@ -54,8 +54,8 @@ export type postType = {
 
 const Page = () => {
   const [posts, setPosts] = useState<postType>([]);
+  const token = localStorage.getItem("accessToken");
   const getPosts = async () => {
-    const token = localStorage.getItem("accessToken");
     const jsonData = await fetch(
       "https://instagram-backend-e3eq.onrender.com/post/getPosts",
       {
@@ -69,8 +69,14 @@ const Page = () => {
     setPosts(response);
     console.log(response);
   };
+  const checkToken = () => {
+    if (!token) {
+      window.location.href = "/login";
+    }
+  };
 
   useEffect(() => {
+    checkToken();
     getPosts();
   }, []);
 
