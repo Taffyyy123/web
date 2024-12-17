@@ -147,7 +147,7 @@ const Page = () => {
                   <div className="flex gap-2">
                     {isLike ? (
                       <button onClick={handleSubmitLike}>
-                        <Heart fill="red" className="text-black" />
+                        <Heart fill="red" className="text-red-600" />
                       </button>
                     ) : (
                       <button onClick={handleSubmitLike}>
