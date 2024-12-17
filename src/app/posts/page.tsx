@@ -23,11 +23,21 @@ import {
 } from "@/components/ui/carousel";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import SeeLikedUsers from "../components/likedUsersDialog";
 
 type likeTypes = {
-  profileImage: string;
+  proImg: string;
   username: string;
   _id: string;
+  email: string;
 };
 
 export type userType = {
@@ -54,6 +64,7 @@ export type postType = {
 
 const Page = () => {
   const [posts, setPosts] = useState<postType>([]);
+  const [isLike, setIsLike] = useState(false);
   const getPosts = async () => {
     const token = localStorage.getItem("accessToken");
     if (!token) {
@@ -76,6 +87,23 @@ const Page = () => {
   useEffect(() => {
     getPosts();
   }, []);
+  const handleSubmitLike = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (isLike) {
+      setIsLike(false);
+    } else {
+      setIsLike(true);
+      const token = localStorage.getItem("accessToken");
+      console.log(token);
+      fetch("https://instagram-backend-e3eq.onrender.com/like/likedPost", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: token,
+        }),
+      });
+    }
+  };
 
   return (
     <div className="w-fit bg-black border-gray-700 border-r-0 border-l-0 rounded-none flex flex-col relative">
@@ -114,18 +142,25 @@ const Page = () => {
                   </CarouselContent>
                 </Carousel>
               </CardContent>
-              <CardFooter className="space-y-3">
+              <CardFooter className="space-y-3 flex flex-col items-start">
                 <div className="flex justify-between w-full">
                   <div className="flex gap-2">
-                    <Heart className="text-white" />
-                    <MessageCircle className="text-white" />
+                    {isLike ? (
+                      <button onClick={handleSubmitLike}>
+                        <Heart fill="red" className="text-black" />
+                      </button>
+                    ) : (
+                      <button onClick={handleSubmitLike}>
+                        <Heart fill="black" className="text-white" />
+                      </button>
+                    )}
+
+                    <MessageCircle className="text-white " />
                     <Send className="text-white" />
                   </div>
                   <Bookmark className="text-white" />
                 </div>
-                <div className="text-white text-sm font-sans font-bold">
-                  123 likes
-                </div>
+                <SeeLikedUsers likedUsers={post.likes} />
                 {post.comments.length > 0 && (
                   <div className="flex justify-start">
                     <Link
