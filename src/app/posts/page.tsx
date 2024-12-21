@@ -31,7 +31,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import SeeLikedUsers from "../components/likedUsersDialog";
+import LikedUsersDialog from "../../custom-components/LikedUsersDialog";
+import IsLiked from "../../custom-components/isLiked";
+import { PostHeader } from "@/custom-components/PostHeader";
+import { PostContent } from "@/custom-components/PostContent";
+import { PostFooter } from "@/custom-components/PostFooter";
 
 type likeTypes = {
   proImg: string;
@@ -64,7 +68,6 @@ export type postType = {
 
 const Page = () => {
   const [posts, setPosts] = useState<postType>([]);
-  const [isLike, setIsLike] = useState(false);
   const getPosts = async () => {
     const token = localStorage.getItem("accessToken");
     if (!token) {
@@ -87,23 +90,6 @@ const Page = () => {
   useEffect(() => {
     getPosts();
   }, []);
-  const handleSubmitLike = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    if (isLike) {
-      setIsLike(false);
-    } else {
-      setIsLike(true);
-      const token = localStorage.getItem("accessToken");
-      console.log(token);
-      fetch("https://instagram-backend-e3eq.onrender.com/like/likedPost", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userId: token,
-        }),
-      });
-    }
-  };
 
   return (
     <div className="w-fit bg-black border-gray-700 border-r-0 border-l-0 rounded-none flex flex-col relative">
@@ -114,64 +100,16 @@ const Page = () => {
               key={post._id}
               className="w-fit bg-black border-gray-700 border-r-0 border-l-0 rounded-none"
             >
-              <CardHeader className="flex items-center gap-4">
-                <Avatar>
-                  <AvatarImage src={post.userId.proImg} />
-                </Avatar>
-                <div className="text-white text-lg font-sans font-bold">
-                  {post.userId.username}
-                </div>
-              </CardHeader>
-              <CardContent className="flex justify-center ">
-                <Carousel>
-                  <CarouselContent>
-                    <CarouselItem>
-                      {" "}
-                      <img src={post.postImg} className="w-screen" />
-                    </CarouselItem>
-                    <CarouselItem>
-                      {" "}
-                      <img src={post.postImg} className="w-screen" />
-                    </CarouselItem>
-                    <CarouselItem>
-                      {" "}
-                      <div>
-                        <img src={post.postImg} className="w-screen" />\
-                      </div>
-                    </CarouselItem>
-                  </CarouselContent>
-                </Carousel>
-              </CardContent>
-              <CardFooter className="space-y-3 flex flex-col items-start">
-                <div className="flex justify-between w-full">
-                  <div className="flex gap-2">
-                    {isLike ? (
-                      <button onClick={handleSubmitLike}>
-                        <Heart fill="red" className="text-red-600" />
-                      </button>
-                    ) : (
-                      <button onClick={handleSubmitLike}>
-                        <Heart fill="black" className="text-white" />
-                      </button>
-                    )}
-
-                    <MessageCircle className="text-white " />
-                    <Send className="text-white" />
-                  </div>
-                  <Bookmark className="text-white" />
-                </div>
-                <SeeLikedUsers likedUsers={post.likes} />
-                {post.comments.length > 0 && (
-                  <div className="flex justify-start">
-                    <Link
-                      className="text-white text-sm font-sans font-bold"
-                      href={`/posts/${post._id}`}
-                    >
-                      View all {post.comments.length} comments
-                    </Link>
-                  </div>
-                )}
-              </CardFooter>
+              <PostHeader
+                proImage={post.userId.proImg}
+                username={post.userId.username}
+              />
+              <PostContent postImage={post.postImg} />
+              <PostFooter
+                likedUsers={post.likes}
+                postId={post._id}
+                postComments={post.comments}
+              />
             </Card>
           );
         })}
