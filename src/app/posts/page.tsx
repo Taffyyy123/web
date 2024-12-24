@@ -92,7 +92,10 @@ const Page = () => {
   }, []);
 
   return (
-    <div className="w-fit bg-black border-gray-700 border-r-0 border-l-0 rounded-none flex flex-col relative">
+    <div className="w-fit bg-black border-gray-700 border-r-0 border-l-0 rounded-none flex flex-col relative pb-8">
+      <div className="text-white w-full flex justify-center text-3xl p-4">
+        Instagram
+      </div>
       <div className=" bg-black ">
         {posts?.map((post) => {
           return (

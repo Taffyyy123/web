@@ -3,6 +3,7 @@ import IsLiked from "./isLiked";
 import { Bookmark, MessageCircle, Send } from "lucide-react";
 import LikedUsersDialog from "./LikedUsersDialog";
 import Link from "next/link";
+import { useState } from "react";
 
 type likeTypes = {
   proImg: string;
@@ -41,17 +42,28 @@ export const PostFooter = ({
 }) => {
   return (
     <CardFooter className="space-y-3 flex flex-col items-start">
-      <div className="flex justify-between w-full">
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          width: "full",
+        }}
+        className="flex justify-between"
+      >
         <div className="flex gap-2">
           <IsLiked
             token={localStorage.getItem("accessToken") ?? ""}
             likedUsers={likedUsers}
             postId={postId}
           />
-          <MessageCircle className="text-white " />
+          <Link href={`/posts/${postId}`}>
+            <MessageCircle className="text-white" />
+          </Link>
           <Send className="text-white" />
         </div>
-        <Bookmark className="text-white" />
+        <div>
+          <Bookmark className="text-white" />
+        </div>
       </div>
       <LikedUsersDialog likedUsers={likedUsers} />
       {postComments.length > 0 && (

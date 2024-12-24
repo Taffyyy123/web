@@ -7,6 +7,7 @@ import { X } from "lucide-react";
 import { Smile } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { comment } from "postcss";
 
 export type userType = {
   _id: string;
@@ -27,7 +28,6 @@ const Page = ({ params }: { params: Promise<{ postId: string }> }) => {
     setInputValue(event.target.value);
   };
   const getComments = async () => {
-    console.log(postId);
     const jsonData = await fetch(
       `https://instagram-backend-e3eq.onrender.com/post/${postId}`
     );
@@ -39,7 +39,21 @@ const Page = ({ params }: { params: Promise<{ postId: string }> }) => {
   useEffect(() => {
     getComments();
   }, [postId]);
-
+  const handleSubmitComment = () => {
+    const token = localStorage.getItem("accessToken");
+    fetch("https://instagram-backend-e3eq.onrender.com/comment/createComment", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        postId,
+        comment: inputValue,
+      }),
+    });
+    setInputValue("");
+  };
   return (
     <div className="bg-black h-screen">
       <Link href="/posts" className="flex justify-end pt-3 pr-4">
@@ -53,13 +67,22 @@ const Page = ({ params }: { params: Promise<{ postId: string }> }) => {
               className="bg-black w-fit  border-gray-700 border-r-0 border-l-0 border-t-0 rounded-none"
             >
               <CardHeader className="flex items-center space-x-3 pb-2">
-                <Avatar>
-                  <AvatarImage
-                    src={comment.userId.proImg}
-                    className="w-10 h-10 rounded-full"
-                  />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
+                {comment.userId.proImg == null ? (
+                  <Avatar>
+                    <AvatarImage
+                      src="https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"
+                      className="w-10 h-10 rounded-full"
+                    />
+                  </Avatar>
+                ) : (
+                  <Avatar>
+                    <AvatarImage
+                      src={comment.userId.proImg}
+                      className="w-10 h-10 rounded-full"
+                    />
+                  </Avatar>
+                )}
+
                 <div className="text-white text-lg font-sans font-bold">
                   {comment.userId.username}
                 </div>
@@ -81,7 +104,10 @@ const Page = ({ params }: { params: Promise<{ postId: string }> }) => {
           className="bg-black text-white outline-none w-3/4"
         />{" "}
         {inputValue.length == 0 ? null : (
-          <button className="text-blue-600 font-bold bg-none w-1/4">
+          <button
+            className="text-blue-600 font-bold bg-none w-1/4"
+            onClick={handleSubmitComment}
+          >
             Post
           </button>
         )}

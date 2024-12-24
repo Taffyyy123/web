@@ -69,6 +69,18 @@ const IsLiked = ({
       });
     }
   };
+  const getPostsLiked = async () => {
+    await fetch("https://instagram-backend-e3eq.onrender.com/post/getPosts", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+  };
+  useEffect(() => {
+    getPostsLiked();
+  }, [isLiked]);
+
   return (
     <div>
       {isLiked ? (
