@@ -8,12 +8,17 @@ const Page = () => {
   const [emailValue, setEmailValue] = useState("");
   const [usernameValue, setUsernameValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
+  const [fullNameValue, setFullNameValue] = useState("");
+  const [fullNameError, setFullNameError] = useState(false);
   const [emailError, setEmailError] = useState(false);
   const [usernameError, setUsernameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
 
   const getEmailValue = (e: { target: { value: string } }) => {
     setEmailValue(e.target.value);
+  };
+  const getFullNameValue = (e: { target: { value: string } }) => {
+    setFullNameValue(e.target.value);
   };
   const getUsernameValue = (e: { target: { value: string } }) => {
     setUsernameValue(e.target.value);
@@ -39,6 +44,11 @@ const Page = () => {
     } else {
       setPasswordError(false);
     }
+    if (fullNameValue.length === 0) {
+      setFullNameError(true);
+    } else {
+      setFullNameError(false);
+    }
     fetch("https://instagram-backend-e3eq.onrender.com/user/createUser", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -46,6 +56,7 @@ const Page = () => {
         email: emailValue,
         password: passwordValue,
         username: usernameValue,
+        fullname: fullNameValue,
       }),
     })
       .then((response) => response.json())
@@ -53,6 +64,7 @@ const Page = () => {
         setEmailValue("");
         setPasswordValue("");
         setUsernameValue("");
+        setFullNameValue("");
         const access = data.token;
         localStorage.setItem("accessToken", access);
         if (access) {
@@ -77,6 +89,15 @@ const Page = () => {
           value={emailValue}
         />
         {emailError == true && (
+          <div className="text-red-600">Hooson bj bolku</div>
+        )}
+        <Input
+          placeholder="Fullname"
+          className="w-3/4 bg-zinc-900 text-gray-50 "
+          onChange={getFullNameValue}
+          value={fullNameValue}
+        />
+        {fullNameError == true && (
           <div className="text-red-600">Hooson bj bolku</div>
         )}
         <Input

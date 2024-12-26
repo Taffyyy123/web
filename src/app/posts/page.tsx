@@ -106,6 +106,7 @@ const Page = () => {
               <PostHeader
                 proImage={post.userId.proImg}
                 username={post.userId.username}
+                userId={post.userId._id}
               />
               <PostContent postImage={post.postImg} />
               <PostFooter

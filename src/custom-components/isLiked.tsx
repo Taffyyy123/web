@@ -1,4 +1,5 @@
 "use client";
+import { postType } from "@/app/posts/page";
 import { jwtDecode } from "jwt-decode";
 import { Heart } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -11,6 +12,9 @@ export type userType = {
   _id: string;
   proImg: string;
   username: string;
+  posts: postType[];
+  bio: string;
+  fullname: string;
 };
 type likeTypes = {
   proImg: string;

@@ -1,12 +1,16 @@
+import { userType } from "@/app/posts/page";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { CardHeader } from "@/components/ui/card";
+import Link from "next/link";
 
 export const PostHeader = ({
   proImage,
   username,
+  userId,
 }: {
   proImage: string;
   username: string;
+  userId: string;
 }) => {
   return (
     <CardHeader className="flex items-center gap-4">
@@ -19,8 +23,12 @@ export const PostHeader = ({
           <AvatarImage src={proImage} />
         </Avatar>
       )}
-
-      <div className="text-white text-lg font-sans font-bold">{username}</div>
+      <Link
+        className="text-white text-lg font-sans font-bold"
+        href={`/posts/user/${userId}`}
+      >
+        {username}
+      </Link>
     </CardHeader>
   );
 };
