@@ -12,7 +12,7 @@ export type userType = {
   _id: string;
   proImg: string;
   username: string;
-  posts: postType[];
+  posts: postType;
   bio: string;
   fullname: string;
 };

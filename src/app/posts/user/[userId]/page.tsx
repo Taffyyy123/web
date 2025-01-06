@@ -4,14 +4,17 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
 } from "@/components/ui/card";
 import { userType } from "@/custom-components/isLiked";
+import { postType } from "@/custom-components/PostFooter";
 import { use, useEffect, useState } from "react";
 
 const Page = ({ params }: { params: Promise<{ userId: string }> }) => {
   const { userId } = use(params);
-  const [user, setUser] = useState<userType>();
+  const [user, setUser] = useState<userType | null>(null); // Use null for initial state
+
   const getUserData = async () => {
     const token = localStorage.getItem("accessToken");
     const jsonData = await fetch(
@@ -27,9 +30,14 @@ const Page = ({ params }: { params: Promise<{ userId: string }> }) => {
     console.log(response);
     setUser(response);
   };
+
   useEffect(() => {
     getUserData();
-  }, []);
+  }, [userId]); // Add userId as dependency to refetch when it changes
+
+  const postsCount = user?.posts?.length ?? 0; // Ensure a fallback of 0 if posts is undefined or null
+  console.log(postsCount);
+
   return (
     <Card className="w-screen h-screen bg-black space-y-6 border-none rounded-none">
       <CardHeader className="flex justify-center pt-5 pb-0 gap-5">
@@ -63,7 +71,7 @@ const Page = ({ params }: { params: Promise<{ userId: string }> }) => {
       </CardDescription>
       <CardContent className="flex w-screen border border-gray-500 border-r-0 border-l-0 justify-center pt-3 pb-3">
         <div className="text-gray-400 w-1/3 flex flex-col items-center">
-          <p className="text-white font-bold">{user?.posts.length}</p> posts
+          <p className="text-white font-bold">{postsCount}</p> posts
         </div>
         <div className="text-gray-400 w-1/3 flex flex-col items-center">
           <p className="text-white font-bold">8911</p> followers
@@ -72,6 +80,15 @@ const Page = ({ params }: { params: Promise<{ userId: string }> }) => {
           <p className="text-white font-bold">57</p> following
         </div>
       </CardContent>
+      <CardFooter>
+        {user?.posts?.map((post) => {
+          return (
+            <div className="text-white" key={post._id}>
+              {post.postImg}
+            </div>
+          );
+        })}
+      </CardFooter>
     </Card>
   );
 };
